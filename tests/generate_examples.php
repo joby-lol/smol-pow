@@ -1,9 +1,9 @@
-<script src="smolpow.js"></script>
+<script src="../smolpow.js"></script>
 <?php
 
 use Joby\Smol\PoW\SmolPoW;
 
-include __DIR__ . '/vendor/autoload.php';
+include __DIR__ . '/../vendor/autoload.php';
 
 $algos = ['sha256'];
 $difficulties = [1, 2, 3, 4, 5];
