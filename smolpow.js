@@ -100,42 +100,44 @@ const smolPoW = {
             }
 
             const workerCode = `
-                self.onmessage = async function(e) {
-                    const { algo, nonce, difficulty } = e.data;
-                    if (typeof crypto === 'undefined' || !crypto.subtle) {
-                        self.postMessage({ error: 'WebCrypto API is not supported in this browser worker.' });
-                        return;
-                    }
+self.onmessage = async function(e) {
+    const { algo, nonce, difficulty } = e.data;
+    if (typeof crypto === 'undefined' || !crypto.subtle) {
+        self.postMessage({ error: 'WebCrypto API is not supported in this browser worker.' });
+        return;
+    }
 
-                    const encoder = new TextEncoder();
-                    const targetPrefix = '0'.repeat(difficulty);
+    const encoder = new TextEncoder();
+    const targetPrefix = '0'.repeat(difficulty);
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 
-                    // Solution must be between 8 and 32 characters long
-                    // Generate candidate nonces incrementally
-                    let counter = 10000000; // 8 digit string
+    // Helper to generate a random 8-character string
+    function getRandomCandidate() {
+        const randomValues = new Uint8Array(8);
+        crypto.getRandomValues(randomValues);
+        let result = '';
+        for (let i = 0; i < 8; i++) {
+            result += chars[randomValues[i] % chars.length];
+        }
+        return result;
+    }
 
-                    while (true) {
-                        const candidate = counter.toString(36).padStart(8, '0');
-                        if (candidate.length > 32) {
-                            self.postMessage({ error: 'Failed to find PoW solution within bounds.' });
-                            return;
-                        }
+    while (true) {
+        const candidate = getRandomCandidate();
 
-                        const inputBuffer = encoder.encode(nonce + candidate);
-                        const hashBuffer = await crypto.subtle.digest('SHA-256', inputBuffer);
+        const inputBuffer = encoder.encode(nonce + candidate);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', inputBuffer);
 
-                        // Convert hash buffer to hex string
-                        const hashArray = Array.from(new Uint8Array(hashBuffer));
-                        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        // Convert hash buffer to hex string
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-                        if (hashHex.startsWith(targetPrefix)) {
-                            self.postMessage({ solution: candidate });
-                            return;
-                        }
-
-                        counter++;
-                    }
-                };
+        if (hashHex.startsWith(targetPrefix)) {
+            self.postMessage({ solution: candidate });
+            return;
+        }
+    }
+};
             `;
 
             let blobUrl;
