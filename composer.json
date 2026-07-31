@@ -1,0 +1,30 @@
+{
+    "name": "joby/smol-pow",
+    "description": "Stateless proof of work challenge generation, solving, and verification using HMAC, SHA256 and simple nonce iteration.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joby\\Smol\\PoW\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joby\\Smol\\PoW\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Joby Elliott",
+            "email": "code@joby.lol"
+        }
+    ],
+    "require-dev": {
+        "php": ">=8.3",
+        "phpunit/phpunit": "^12.1",
+        "phpstan/phpstan": "^2.1"
+    }
+}
