@@ -1,6 +1,6 @@
 # smolPoW
 
-A simple and stateless proof of work system using HMAC and designed to allow developers to drop in PoW to existing web applications with minimal friction. The main purpose is to allow an entirely static HTML/JS page to do a simple PoW and then bounce back to the specified URL.
+A simple and stateless proof of work system using HMAC-signed state and a SHA256 matching challenge and designed to allow developers to drop in PoW to existing web applications with minimal friction. The main purpose is to allow an entirely static HTML/JS page to do a simple PoW and then bounce back to the specified URL, without ever needing to store information on the server about the challenge.
 
 ## Installation
 
