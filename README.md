@@ -39,7 +39,7 @@ To use smolPoW in your application, you need to:
 
 ## Requirements
 
-Fully tested on PHP 8.3+, static analysis for PHP 8.1+. No external dependencies.
+Fully test suite and max phpstan for PHP 8.3+. No external dependencies.
 
 ## License
 
